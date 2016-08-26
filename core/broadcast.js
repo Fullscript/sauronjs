@@ -1,11 +1,12 @@
 'use strict';
 
 var Rx = require('rxjs/Rx');
+var Subject = Rx.Subject;
 
-var Subject = new Rx.Subject();
+var subject = new Subject();
 
 function next(channels, event, data, id) {
-  Subject.next({
+  subject.next({
     channels: channels,
     event: event,
     data: data,
@@ -28,9 +29,9 @@ function filter(broadcast) {
 };
 
 function attachSubject(object) {
-  object.broadcastSubject = new Rx.Subject()
+  object.broadcastSubject = new Subject()
     .filter(filter.bind(object));
-  return Subject.subscribe(object.broadcastSubject);
+  return subject.subscribe(object.broadcastSubject);
 }
 
 exports.next = next;

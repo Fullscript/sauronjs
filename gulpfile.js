@@ -6,6 +6,7 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
+var connect = require('gulp-connect');
 
 var BUNDLE_NAME = 'sauron';
 var BUILD_FOLDER = 'dist/';
@@ -17,11 +18,10 @@ gulp.task('clean', function() {
 gulp.task('bundle', ['clean'], function() {
   return browserify({
       entries: './index.js',
-      debug: true
+      standalone: BUNDLE_NAME
     })
     .bundle()
     .pipe(source(BUNDLE_NAME + '.js'))
-    .pipe(buffer())
     .on('error', gutil.log)
     .pipe(gulp.dest(BUILD_FOLDER));
 });
@@ -36,4 +36,11 @@ gulp.task('minify', ['bundle'], function() {
     .pipe(gulp.dest(BUILD_FOLDER));
 });
 
-gulp.task('default', ['bundle', 'minify']);
+gulp.task('demo', ['bundle'], function() {
+  return connect.server({
+    root: ['example', BUILD_FOLDER],
+    port: 3001
+  });
+});
+
+gulp.task('release', ['minify']);
