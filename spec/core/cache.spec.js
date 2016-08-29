@@ -1,4 +1,4 @@
-var CacheFactory = require('core/cache');
+var CacheFactory = require('src/core/cache');
 
 describe('CacheFactory', function() {
   it('does nothing when no id is specified', function() {

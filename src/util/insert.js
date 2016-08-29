@@ -11,7 +11,6 @@ function insert(params) {
   return element;
 }
 
-// also a useful util function
 function setAttributes(element, attributes) {
   var attrKeys = Object.keys(attributes);
   for(var i = 0; i < attrKeys.length; i++) {

@@ -11,9 +11,9 @@
   not play nice with gulp due to it having its own stdout based stream interface. Webpack has
   an easy to use streamable wrapper, so it will be used as the bundler. However tasks such as
   minification, babelification, local http webserver, pipelining non-JS files and such will be
-  composed of gulp tasks to ease vendor lock in.
+  composed of gulp tasks to minimize vendor lock in.
 
-  TLDR; only use webpack for bundling please
+  TLDR; only use webpack for bundling if possible
 */
 
 
@@ -29,14 +29,15 @@ var webpack = require('webpack-stream');
 var path = require('path');
 
 var BUNDLE_NAME = 'sauron';
-var BUILD_FOLDER = 'dist/';
+var BUILD_DIR = 'dist/';
+var SRC_DIR = 'src/';
 
 gulp.task('clean', function() {
-  return del(BUILD_FOLDER);
+  return del(BUILD_DIR);
 })
 
 gulp.task('bundle', ['clean'], function() {
-  return gulp.src('src/index.js')
+  return gulp.src(SRC_DIR + 'index.js')
     .pipe(webpack({
       output: {
         filename: BUNDLE_NAME + '.js',
@@ -44,22 +45,22 @@ gulp.task('bundle', ['clean'], function() {
         libraryTarget: "umd"
       }
     }))
-    .pipe(gulp.dest(BUILD_FOLDER));
+    .pipe(gulp.dest(BUILD_DIR));
 });
 
 gulp.task('minify', ['bundle'], function() {
-  return gulp.src(BUILD_FOLDER + BUNDLE_NAME + '.js')
+  return gulp.src(BUILD_DIR + BUNDLE_NAME + '.js')
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
     }))
     .on('error', gutil.log)
-    .pipe(gulp.dest(BUILD_FOLDER));
+    .pipe(gulp.dest(BUILD_DIR));
 });
 
 gulp.task('demo', ['bundle'], function() {
   return connect.server({
-    root: ['example', BUILD_FOLDER],
+    root: ['example', BUILD_DIR],
     port: 3001
   });
 });
@@ -68,8 +69,7 @@ gulp.task('test', function() {
   return gulp.src('spec/**/*.spec.js')
     .pipe(webpack({
       resolve: {
-        root: path.resolve('./src'),
-        extensions: ['', '.js']
+        root: path.resolve(__dirname)
       }
     }))
     .pipe(jasmineBrowser.specRunner({
