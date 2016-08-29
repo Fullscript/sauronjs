@@ -1,5 +1,8 @@
 /*
   PLEASE NOTE
+
+  TL;DR only use webpack for bundling if possible
+
   There is tooling overlap between webpack and gulp. Webpack is a frontend swiss army knife
   It offers tons of features/plugins from module bundling, minification, concatenation of various
   filetypes, a web development server with hot module replacement, transpilation options etc etc.
@@ -12,11 +15,7 @@
   an easy to use streamable wrapper, so it will be used as the bundler. However tasks such as
   minification, babelification, local http webserver, pipelining non-JS files and such will be
   composed of gulp tasks to minimize vendor lock in.
-
-  TLDR; only use webpack for bundling if possible
 */
-
-
 
 var del = require('del');
 var gulp = require('gulp');
@@ -30,14 +29,13 @@ var path = require('path');
 
 var BUNDLE_NAME = 'sauron';
 var BUILD_DIR = 'dist/';
-var SRC_DIR = 'src/';
 
 gulp.task('clean', function() {
   return del(BUILD_DIR);
 })
 
 gulp.task('bundle', ['clean'], function() {
-  return gulp.src(SRC_DIR + 'index.js')
+  return gulp.src('src/index.js')
     .pipe(webpack({
       output: {
         filename: BUNDLE_NAME + '.js',

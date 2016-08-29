@@ -97,22 +97,4 @@ function instance(componentMap, id) {
   };
 }
 
-/* BEGIN CUSTOM EVENTS AVOID USING */
-/* TODO: with the broadcast refactor, this event system should be removed */
-function dispatchEvent(eventName) {
-  var event = document.createEvent('Event');
-  event.initEvent(eventName, true, true);
-  document.body.dispatchEvent(event);
-}
-
-exports.events = {
-  dom: {
-    update: function() {
-      dispatchEvent('sauron:dom:update');
-    }
-  }
-};
-/* END CUSTOM EVENTS */
-exports.Component = require('./component');
-exports.insert = require('../util/insert');
-exports.instance = instance;
+module.exports = instance;

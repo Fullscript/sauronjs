@@ -27,7 +27,7 @@ ready(function() {
         },
         parent: sandbox
       });
-      var app = sauron.instance({
+      var app = sauron({
         foo: Foo
       });
       expect(app.info().total).toBe(1);
@@ -42,7 +42,7 @@ ready(function() {
         },
         parent: sandbox
       });
-      var app = sauron.instance({
+      var app = sauron({
         bar: Foo
       });
       expect(app.info().total).toBe(0);
@@ -62,7 +62,7 @@ ready(function() {
           parent: sandbox
         });
         cacheElement.innerHTML = "world";
-        sauron.instance({});
+        sauron({});
         var cache = CacheFactory('sauron');
         expect(cache.get('hello')).toBe('world');
       });
@@ -80,7 +80,7 @@ ready(function() {
           },
           parent: sandbox
         });
-        app = sauron.instance({
+        app = sauron({
           foo: Foo
         });
       });

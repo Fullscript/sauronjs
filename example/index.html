@@ -2,23 +2,15 @@
 <script src="sauron.js"></script>
 <script>
   function MyComponent(params) {
-    var self = this;
     sauron.Component.call(this, params);
-
-    self.element.innerHTML = "This is sauron";
+    this.element.innerHTML = "This is sauron";
   }
   MyComponent.prototype = Object.create(sauron.Component.prototype);
   MyComponent.prototype.constructor = MyComponent;
 
-  function start() {
+  sauron.util.ready(function() {
     sauron.instance({
       test: MyComponent
     });
-  }
-
-  if (document.readyState === 'complete' || document.readyState !== 'loading') {
-    start();
-  } else {
-    document.addEventListener('DOMContentLoaded', start);
-  }
+  });
 </script>
