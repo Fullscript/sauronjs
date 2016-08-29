@@ -1,6 +1,6 @@
 'use strict';
 
-var broadcast = require('health_wave/modules/broadcast');
+var broadcast = require('./broadcast');
 
 function Service(pubs, subs) {
   this.pubChannels = pubs;

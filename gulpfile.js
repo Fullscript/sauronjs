@@ -1,12 +1,32 @@
+/*
+  PLEASE NOTE
+  There is tooling overlap between webpack and gulp. Webpack is a frontend swiss army knife
+  It offers tons of features/plugins from module bundling, minification, concatenation of various
+  filetypes, a web development server with hot module replacement, transpilation options etc etc.
+
+  With tooling, I find it best (only my opinion) to avoid vendor lock in and compose a custom pipeline
+  built from various tools, and to swap them out when needed. Which is why I like gulp,
+  since it only specifies a streamable interface with fs globbing and fs watching.
+  Originally I let the great browserify attempt to bundle our project, Unfortunately it does
+  not play nice with gulp due to it having its own stdout based stream interface. Webpack has
+  an easy to use streamable wrapper, so it will be used as the bundler. However tasks such as
+  minification, babelification, local http webserver, pipelining non-JS files and such will be
+  composed of gulp tasks to ease vendor lock in.
+
+  TLDR; only use webpack for bundling please
+*/
+
+
+
 var del = require('del');
-var browserify = require('browserify');
 var gulp = require('gulp');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var connect = require('gulp-connect');
+var jasmineBrowser = require('gulp-jasmine-browser');
+var webpack = require('webpack-stream');
+var path = require('path');
 
 var BUNDLE_NAME = 'sauron';
 var BUILD_FOLDER = 'dist/';
@@ -16,13 +36,14 @@ gulp.task('clean', function() {
 })
 
 gulp.task('bundle', ['clean'], function() {
-  return browserify({
-      entries: './index.js',
-      standalone: BUNDLE_NAME
-    })
-    .bundle()
-    .pipe(source(BUNDLE_NAME + '.js'))
-    .on('error', gutil.log)
+  return gulp.src('src/index.js')
+    .pipe(webpack({
+      output: {
+        filename: BUNDLE_NAME + '.js',
+        library: BUNDLE_NAME,
+        libraryTarget: "umd"
+      }
+    }))
     .pipe(gulp.dest(BUILD_FOLDER));
 });
 
@@ -41,6 +62,20 @@ gulp.task('demo', ['bundle'], function() {
     root: ['example', BUILD_FOLDER],
     port: 3001
   });
+});
+
+gulp.task('test', function() {
+  return gulp.src('spec/**/*.spec.js')
+    .pipe(webpack({
+      resolve: {
+        root: path.resolve('./src'),
+        extensions: ['', '.js']
+      }
+    }))
+    .pipe(jasmineBrowser.specRunner({
+      console: true
+    }))
+    .pipe(jasmineBrowser.headless());
 });
 
 gulp.task('release', ['minify']);
