@@ -12,7 +12,7 @@
     "phantomjs-prebuilt": "^2.1.12",
     "webpack-stream": "^3.2.0"
   },
-  "name": "sauron",
+  "name": "sauronjs",
   "description": "frontend library for advanced interactivity based on observables",
   "version": "0.1.0",
   "main": "src/index.js",
