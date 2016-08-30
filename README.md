@@ -3,7 +3,7 @@ SauronJS is a library that was created to help developers build interactive comp
 
 Coupled with a library like [Turbolinks](https://github.com/turbolinks/turbolinks) or [Turbograft](https://github.com/Shopify/turbograft/), it can make a standard web app feel like a Single Page Application (SPA).
 
-Its name comes from the use of the observer pattern followed in [RxJS](http://reactivex.io/), the main dependency for the library. It allows developers to write better structured and more maintainable JavaScript.
+Its name comes from the use of the observer pattern followed in [RxJS](https://github.com/ReactiveX/rxjs), the main dependency for the library. It allows developers to write better structured and more maintainable JavaScript.
 
 ## Principles
 - Treat the DOM as a model
