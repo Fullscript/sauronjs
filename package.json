@@ -11,5 +11,32 @@
     "gulp-uglify": "^2.0.0",
     "phantomjs-prebuilt": "^2.1.12",
     "webpack-stream": "^3.2.0"
-  }
+  },
+  "name": "sauron",
+  "description": "frontend library for advanced interactivity based on observables",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HealthWave/sauronjs.git"
+  },
+  "keywords": [
+    "observables",
+    "reactive",
+    "functional",
+    "broadcast",
+    "events"
+  ],
+  "author": "Alex Pilon <apilo088@gmail.com> (https://github.com/MadMub)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HealthWave/sauronjs/issues"
+  },
+  "homepage": "https://github.com/HealthWave/sauronjs#readme"
 }
