@@ -34,6 +34,7 @@
     "events"
   ],
   "author": "Alex Pilon <apilo088@gmail.com> (https://github.com/MadMub)",
+  "contributors": ["Patrick Vice", "Kurt Funai", "Matt MacLeod"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/HealthWave/sauronjs/issues"
