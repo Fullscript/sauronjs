@@ -1,0 +1,56 @@
+body {
+  font-family: "Helvetica", "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  padding: 4em 1em;
+  background: white;
+  color: #555;
+}
+
+#main {
+  width: 80%;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+pre {
+  overflow: auto;
+  white-space: pre-wrap;
+  font-family: courier;
+  background-color: #eee;
+  border-left: 3px solid #559DF3;
+  padding: 1em;
+  -moz-font-smoothing: grayscale;
+  -webkit-font-smoothing: initial;
+  color: #777;
+}
+
+.section {
+  margin: 30px 0;
+}
+
+.section h2 {
+  margin-top: 1em;
+  padding-top: 1em;
+}
+.section h4 {
+font-size: 18px;
+font-weight: 300;
+margin-bottom: 0;
+padding-bottom: 0;
+}
+
+h1, h2, strong {
+  color: #333;
+}
+
+.muted {
+  color: #888;
+}
+
+.result {
+  padding: 1em;
+  border-left: 3px solid #96C054;
+  background-color: #eee;
+}
