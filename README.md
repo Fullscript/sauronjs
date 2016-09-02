@@ -22,3 +22,18 @@ Its name comes from the use of the observer pattern followed in [RxJS](https://g
 - Better instantiation of SauronJS
 - More Lifecycle hooks
 - Changelog
+
+
+## Example application
+To view the extended documentation and see the example app:
+
+1. Install gulp:
+  ```
+  npm install -g gulp
+  ```
+2. Launch the demo server
+  ```
+  gulp demo
+  ```
+3. Open your browser to [http://localhost:3001/](http://localhost:3001/)
+4. Be amazed
