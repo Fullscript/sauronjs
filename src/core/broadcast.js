@@ -22,11 +22,11 @@ function filter(broadcast) {
   for(var i = 0; i < broadcast.channels.length; i++) {
     var channel = broadcast.channels[i];
     if(this.subChannelsHash[channel])
-      return true
+      return true;
   }
   // otherwise ignore event
   return false;
-};
+}
 
 function attachSubject(object) {
   object.broadcastSubject = new Subject()

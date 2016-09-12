@@ -9,7 +9,7 @@ function Info() {
   this.deleted = 0;
 }
 
-Object.defineProperty(Info.prototype, "total", {
+Object.defineProperty(Info.prototype, 'total', {
   get: function() {
     return this.created + this.saved;
   }
@@ -69,7 +69,7 @@ function cleanup(newComponents, oldComponents) {
 
 function instance(componentMap, id) {
   var lastBootstrap = {};
-  id = id || "sauron";
+  id = id || 'sauron';
 
   function rebootstrap(map) {
     map = map || componentMap;
