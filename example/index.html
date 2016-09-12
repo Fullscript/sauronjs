@@ -1,16 +1,57 @@
-<div data-fs-component="test"></div>
-<script src="sauron.js"></script>
-<script>
-  function MyComponent(params) {
-    sauron.Component.call(this, params);
-    this.element.innerHTML = "This is sauron";
-  }
-  MyComponent.prototype = Object.create(sauron.Component.prototype);
-  MyComponent.prototype.constructor = MyComponent;
+<html>
+  <head>
+    <title>SauronJS Example App</title>
+    <link rel="stylesheet" type="text/css" href="css/example.css">
+    <script src="sauron.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/components/my_component.js"></script>
+  </head>
 
-  sauron.util.ready(function() {
-    sauron.instance({
-      test: MyComponent
-    });
+  <body>
+    <div id="main">
+      <div id="header">
+        <h1>SauronJS</h1>
+
+        <p>SauronJS is a library that was created to help developers build interactive components while leveraging server-side technologies. The goal was to allow for standard server-side development to be used primarily, and add interactivity where required.</p>
+
+        <p>Coupled with a library like Turbolinks or Turbograft, it can make a standard web app feel like a Single Page Application (SPA).</p>
+
+        <p>Its name comes from the use of the observer pattern followed in RxJS, the main dependency for the library. It allows developers to write better structured and more maintainable JavaScript.</p>
+      </div>
+      <div class="section">
+        <h2>Example component</h2>
+          <h4>HTML Markup:</h4>
+<pre>
+&lt;div data-fs-component="hello-world"&gt;&lt;/div&gt;
+</pre>
+
+          <h4>Building our example component:</h4>
+<pre>
+function MyComponent(params) {
+  sauron.Component.call(this, params);
+  this.element.innerHTML = "This is sauron";
+}
+MyComponent.prototype = Object.create(sauron.Component.prototype);
+MyComponent.prototype.constructor = MyComponent;
+</pre>
+        <em class="muted">js/components/my_component.js</em>
+
+          <h4>Hooking it all together:</h4>
+<pre>
+// Boostrap sauron and define your component map
+sauron.util.ready(function() {
+  sauron.instance({
+    "hello-world": MyComponent
   });
-</script>
+});
+</pre>
+        <em class="muted">js/index.js</em>
+        <h4>Result:</h4>
+        <div class="result">
+          <div data-fs-component="hello-world"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
