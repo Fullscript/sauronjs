@@ -14,7 +14,7 @@
   },
   "name": "sauronjs",
   "description": "frontend library for advanced interactivity based on observables",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "src/index.js",
   "directories": {
     "example": "example"
