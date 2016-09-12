@@ -32,7 +32,7 @@ var BUILD_DIR = 'dist/';
 
 gulp.task('clean', function() {
   return del(BUILD_DIR);
-})
+});
 
 gulp.task('bundle', ['clean'], function() {
   return gulp.src('src/index.js')
@@ -40,7 +40,7 @@ gulp.task('bundle', ['clean'], function() {
       output: {
         filename: BUNDLE_NAME + '.js',
         library: BUNDLE_NAME,
-        libraryTarget: "umd"
+        libraryTarget: 'umd'
       }
     }))
     .pipe(gulp.dest(BUILD_DIR));

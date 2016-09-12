@@ -4,7 +4,7 @@ var broadcast = require('./broadcast');
 
 function strToHash(str) {
   var hash = {};
-  if(!!str) {
+  if(str) {
     var tokens = str.split(',');
     for(var i = 0; i < tokens.length; i++) {
       var token = tokens[i].trim();
@@ -71,10 +71,10 @@ Component.prototype.findAll = function(selector) {
 
 /* element.(get|set)Attribute shortcut */
 Component.prototype.attr = function(key, value) {
-  if(!!value)
+  if(typeof(value) !== 'undefined')
     this.element.setAttribute(key, value);
   else
-    return this.element.getAttribute(key)
+    return this.element.getAttribute(key);
 };
 
 module.exports = Component;

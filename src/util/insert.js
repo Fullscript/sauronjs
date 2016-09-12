@@ -15,7 +15,7 @@ function setAttributes(element, attributes) {
   var attrKeys = Object.keys(attributes);
   for(var i = 0; i < attrKeys.length; i++) {
     var attr = attrKeys[i];
-    element.setAttribute(attr, attributes[attr])
+    element.setAttribute(attr, attributes[attr]);
   }
 }
 
