@@ -17,78 +17,76 @@
   composed of gulp tasks to minimize vendor lock in.
 */
 
-import del from 'del';
-import gulp from 'gulp';
-import uglify from 'gulp-uglify';
-import gutil from 'gulp-util';
-import rename from 'gulp-rename';
-import connect from 'gulp-connect'
-import jasmineBrowser from 'gulp-jasmine-browser';
-import webpack from 'webpack-stream';
-import babel from 'gulp-babel';
-import path from 'path'
+var del = require('del');
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+var gutil = require('gulp-util');
+var rename = require('gulp-rename');
+var connect = require('gulp-connect');
+var jasmineBrowser = require('gulp-jasmine-browser');
+var eslint = require('gulp-eslint');
+var webpack = require('webpack-stream');
 
-const BUNDLE_NAME = 'sauron';
-const BUILD_DIR = 'dist/';
-
-const moduleConfig = {
-  loaders: [
-    {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: "babel-loader",
-      query: { "presets": ["es2015"] }
-    }
-  ]
+var BUNDLE_NAME = 'sauron';
+var globs = {
+  src: 'src/**/*.js',
+  spec: 'spec/**/*.spec.js'
 };
 
-const webpackConfig = {
-  module: moduleConfig,
-  output: {
-    filename: BUNDLE_NAME + '.js',
-    library: BUNDLE_NAME,
-    libraryTarget: 'umd'
-  }
+var paths = {
+  root: __dirname,
+  entry: 'src/index.js',
+  eslint: './.eslintrc.json',
+  build: 'dist/',
+  example: 'example/'
 };
-
-const webpackTestConfig = {
-  module: moduleConfig,
-  resolve: {
-    root: path.resolve(__dirname)
-  }
-};
-
 
 gulp.task('clean', function() {
-  return del(BUILD_DIR);
+  return del(paths.build);
 });
 
 gulp.task('bundle', ['clean'], function() {
-  return gulp.src('src/index.js')
-    .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest(BUILD_DIR));
+  return gulp.src(paths.entry)
+    .pipe(webpack({
+      output: {
+        filename: BUNDLE_NAME + '.js',
+        library: BUNDLE_NAME,
+        libraryTarget: 'umd'
+      }
+    }))
+    .pipe(gulp.dest(paths.build));
 });
 
 gulp.task('minify', ['bundle'], function() {
-  return gulp.src(BUILD_DIR + BUNDLE_NAME + '.js')
+  return gulp.src(paths.build + BUNDLE_NAME + '.js')
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
     }))
     .on('error', gutil.log)
-    .pipe(gulp.dest(BUILD_DIR));
+    .pipe(gulp.dest(paths.build));
 });
 
 gulp.task('demo', ['bundle'], function() {
   return connect.server({
-    root: ['example', BUILD_DIR],
+    root: [paths.example, paths.build],
     port: 3001
   });
 });
 
-gulp.task('test', function() {
-  return gulp.src('spec/**/*.spec.js')
-    .pipe(webpack(webpackTestConfig))
+gulp.task('lint', function() {
+  return gulp.src(globs.src)
+    .pipe(eslint(paths.eslint))
+    .pipe(eslint.failOnError());
+});
+
+gulp.task('test', ['lint'], function() {
+  return gulp.src(globs.spec)
+    .pipe(webpack({
+      resolve: {
+        root: paths.root
+      }
+    }))
     .pipe(jasmineBrowser.specRunner({
       console: true
     }))
