@@ -1,22 +1,18 @@
-'use strict';
-
-function insert(params) {
+export function insert(params) {
   params = params || {};
-  var element = document.createElement(params.tagName || 'DIV');
+  let element = document.createElement(params.tagName || 'DIV');
   if(params.attributes) {
     setAttributes(element, params.attributes);
   }
-  var parentElement = params.parent || document.body;
+  let parentElement = params.parent || document.body;
   parentElement.appendChild(element);
   return element;
 }
 
 function setAttributes(element, attributes) {
-  var attrKeys = Object.keys(attributes);
-  for(var i = 0; i < attrKeys.length; i++) {
-    var attr = attrKeys[i];
+  let attrKeys = Object.keys(attributes);
+  for(let i = 0; i < attrKeys.length; i++) {
+    let attr = attrKeys[i];
     element.setAttribute(attr, attributes[attr]);
   }
 }
-
-module.exports = insert;
