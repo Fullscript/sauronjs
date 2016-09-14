@@ -17,20 +17,21 @@
   composed of gulp tasks to minimize vendor lock in.
 */
 
-var del = require('del');
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var gutil = require('gulp-util');
-var rename = require('gulp-rename');
-var connect = require('gulp-connect');
-var jasmineBrowser = require('gulp-jasmine-browser');
-var webpack = require('webpack-stream');
-var path = require('path');
+import del from 'del';
+import gulp from 'gulp';
+import uglify from 'gulp-uglify';
+import gutil from 'gulp-util';
+import rename from 'gulp-rename';
+import connect from 'gulp-connect'
+import jasmineBrowser from 'gulp-jasmine-browser';
+import webpack from 'webpack-stream';
+import babel from 'gulp-babel';
+import path from 'path'
 
-var BUNDLE_NAME = 'sauron';
-var BUILD_DIR = 'dist/';
+const BUNDLE_NAME = 'sauron';
+const BUILD_DIR = 'dist/';
 
-const moduleConfig =  {
+const moduleConfig = {
   loaders: [
     {
       test: /\.js$/,
@@ -50,12 +51,12 @@ const webpackConfig = {
   }
 };
 
-let webpackTestConfig = {
+const webpackTestConfig = {
   module: moduleConfig,
   resolve: {
     root: path.resolve(__dirname)
   }
-}
+};
 
 
 gulp.task('clean', function() {
