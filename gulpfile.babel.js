@@ -17,18 +17,47 @@
   composed of gulp tasks to minimize vendor lock in.
 */
 
-var del = require('del');
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var gutil = require('gulp-util');
-var rename = require('gulp-rename');
-var connect = require('gulp-connect');
-var jasmineBrowser = require('gulp-jasmine-browser');
-var webpack = require('webpack-stream');
-var path = require('path');
+import del from 'del';
+import gulp from 'gulp';
+import uglify from 'gulp-uglify';
+import gutil from 'gulp-util';
+import rename from 'gulp-rename';
+import connect from 'gulp-connect'
+import jasmineBrowser from 'gulp-jasmine-browser';
+import webpack from 'webpack-stream';
+import babel from 'gulp-babel';
+import path from 'path'
 
-var BUNDLE_NAME = 'sauron';
-var BUILD_DIR = 'dist/';
+const BUNDLE_NAME = 'sauron';
+const BUILD_DIR = 'dist/';
+
+const moduleConfig = {
+  loaders: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: "babel-loader",
+      query: { "presets": ["es2015"] }
+    }
+  ]
+};
+
+const webpackConfig = {
+  module: moduleConfig,
+  output: {
+    filename: BUNDLE_NAME + '.js',
+    library: BUNDLE_NAME,
+    libraryTarget: 'umd'
+  }
+};
+
+const webpackTestConfig = {
+  module: moduleConfig,
+  resolve: {
+    root: path.resolve(__dirname)
+  }
+};
+
 
 gulp.task('clean', function() {
   return del(BUILD_DIR);
@@ -36,13 +65,7 @@ gulp.task('clean', function() {
 
 gulp.task('bundle', ['clean'], function() {
   return gulp.src('src/index.js')
-    .pipe(webpack({
-      output: {
-        filename: BUNDLE_NAME + '.js',
-        library: BUNDLE_NAME,
-        libraryTarget: 'umd'
-      }
-    }))
+    .pipe(webpack(webpackConfig))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
@@ -65,11 +88,7 @@ gulp.task('demo', ['bundle'], function() {
 
 gulp.task('test', function() {
   return gulp.src('spec/**/*.spec.js')
-    .pipe(webpack({
-      resolve: {
-        root: path.resolve(__dirname)
-      }
-    }))
+    .pipe(webpack(webpackTestConfig))
     .pipe(jasmineBrowser.specRunner({
       console: true
     }))

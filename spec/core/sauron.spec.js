@@ -1,20 +1,18 @@
-var sauron = require('src/core/sauron');
-var Component = require('src/core/component');
-var CacheFactory = require('src/core/cache');
-var insert = require('src/util/insert');
-var ready = require('src/util/ready');
-var util = require('util');
+import sauron from 'src/core/sauron';
+import { Component } from 'src/core/component';
+import CacheFactory from 'src/core/cache';
+import { insert, ready } from 'src/util';
 
 ready(function() {
   describe('the eye of sauron', function() {
     // dummy component definition extends Component
-    function Foo(params) {
-      var self = this;
-      Component.call(self, params);
+    class Foo extends Component {
+      constructor(params) {
+        super(params)
+      }
     }
-    util.inherits(Foo, Component);
 
-    var sandbox = insert();
+    let sandbox = insert();
 
     afterEach(function() {
       sandbox.innerHTML = "";
@@ -27,7 +25,7 @@ ready(function() {
         },
         parent: sandbox
       });
-      var app = sauron({
+      let app = sauron({
         foo: Foo
       });
       expect(app.info().total).toBe(1);
@@ -42,7 +40,7 @@ ready(function() {
         },
         parent: sandbox
       });
-      var app = sauron({
+      let app = sauron({
         bar: Foo
       });
       expect(app.info().total).toBe(0);
@@ -53,7 +51,7 @@ ready(function() {
 
     describe('caching', function() {
       it('scrapes the dom for text/fs-cache scripts and commits them to the cache', function() {
-        var cacheElement = insert({
+        let cacheElement = insert({
           attributes: {
             id: 'hello',
             type: 'text/fs-cache'
@@ -63,15 +61,15 @@ ready(function() {
         });
         cacheElement.innerHTML = "world";
         sauron({});
-        var cache = CacheFactory('sauron');
+        let cache = CacheFactory('sauron');
         expect(cache.get('hello')).toBe('world');
       });
     });
 
     describe("rebootstrap", function() {
 
-      var app;
-      var element;
+      let app;
+      let element;
 
       beforeEach(function() {
         element = insert({

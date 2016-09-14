@@ -1,33 +1,33 @@
-var CacheFactory = require('src/core/cache');
+import CacheFactory, { Cache } from 'src/core/cache';
 
 describe('CacheFactory', function() {
   it('does nothing when no id is specified', function() {
-    var cache = CacheFactory();
+    let cache = CacheFactory();
     expect(cache).not.toBeDefined();
   });
 
   it('creates a cache for the specified id', function() {
-    var cache = CacheFactory('test');
+    let cache = CacheFactory('test');
     expect(cache).toBeDefined();
   });
 
   it('retrieves an existing cache', function() {
-    var cache = CacheFactory('test');
-    var cache2 = CacheFactory('test');
+    let cache = CacheFactory('test');
+    let cache2 = CacheFactory('test');
     expect(cache).toBe(cache2);
   });
 
   it('different ids return different caches', function() {
-    var cache = CacheFactory('test');
-    var cache2 = CacheFactory('test2');
+    let cache = CacheFactory('test');
+    let cache2 = CacheFactory('test2');
     expect(cache).not.toBe(cache2);
   });
 });
 
 describe('Cache', function() {
-  var cache;
+  let cache;
   beforeEach(function() {
-    cache = new CacheFactory.Cache();
+    cache = new Cache();
   });
 
   describe('constructor', function() {
@@ -68,7 +68,7 @@ describe('Cache', function() {
   describe('keys', function() {
     it('returns an array of keys in the cache', function() {
       cache.set('hello', 'world');
-      var keys = cache.keys();
+      let keys = cache.keys();
       expect(Array.isArray(keys)).toBe(true);
       expect(keys.length).toBe(1);
       expect(keys[0]).toBe('hello');

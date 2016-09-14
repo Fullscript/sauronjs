@@ -1,6 +1,4 @@
-'use strict';
-
-var caches = {};
+let caches = {};
 
 /* more of a singleton manager than a factory */
 function CacheFactory(id) {
@@ -11,40 +9,40 @@ function CacheFactory(id) {
   return caches[id];
 }
 
-function Cache() {
-  this.clear();
+export class Cache {
+  constructor(){
+    this._cache = {};
+  }
+
+  get(key){
+    return this._cache[key];
+  }
+
+  exists(key){
+    return !!this.get(key);
+  }
+
+  set(key, value){
+    this._cache[key] = value;
+  }
+
+  clear(){
+    this._cache = {};
+  }
+
+  keys(){
+    return Object.keys(this._cache);
+  }
+
+  size(){
+    return this.keys().length;
+  }
+
+  forEach(fn){
+    let keys = this.keys();
+    for(let i; i < keys.length; i++)
+      fn( keys[i], this.get(keys[i]) )
+  }
 }
 
-Cache.prototype.get = function(key) {
-  return this._cache[key];
-};
-
-Cache.prototype.exists = function(key) {
-  return !!this.get(key);
-};
-
-Cache.prototype.set = function(key, value) {
-  this._cache[key] = value;
-};
-
-Cache.prototype.clear = function() {
-  this._cache = {};
-};
-
-Cache.prototype.keys = function() {
-  return Object.keys(this._cache);
-};
-
-Cache.prototype.size = function() {
-  return this.keys().length;
-};
-
-Cache.prototype.forEach = function(fn) {
-  var keys = this.keys();
-  for (var i = 0; i < keys.length; i++)
-    fn(keys[i], this.get(keys[i]));
-};
-
-CacheFactory.Cache = Cache;
-
-module.exports = CacheFactory;
+export default CacheFactory;

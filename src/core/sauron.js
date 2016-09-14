@@ -1,44 +1,42 @@
-'use strict';
+import Cache from './cache';
 
-var Cache = require('./cache');
+class Info {
+  constructor(){
+    this.noConstructor = {};
+    this.created = 0;
+    this.saved = 0;
+    this.deleted = 0;
+  }
 
-function Info() {
-  this.noConstructor = {};
-  this.created = 0;
-  this.saved = 0;
-  this.deleted = 0;
-}
-
-Object.defineProperty(Info.prototype, 'total', {
-  get: function() {
+  get total(){
     return this.created + this.saved;
   }
-});
+}
 
 function initCache(id) {
-  var cache = Cache(id);
-  var nodes = document.querySelectorAll('script[type="text/fs-cache"]');
-  for (var i = 0; i < nodes.length; i++)
+  let cache = Cache(id);
+  let nodes = document.querySelectorAll('script[type="text/fs-cache"]');
+  for (let i = 0; i < nodes.length; i++)
     cache.set(nodes[i].id, nodes[i].textContent.trim());
 }
 
 function bootstrap(componentMap, oldComponents) {
   componentMap = componentMap || {};
   oldComponents = oldComponents || {};
-  var components = {};
-  var info = new Info();
-  var elements = document.querySelectorAll('[data-fs-component]');
-  for (var i = 0; i < elements.length; i++) {
-    var element = elements[i];
-    var id = element.getAttribute('data-fs-bootstrap-id');
+  let components = {};
+  let info = new Info();
+  let elements = document.querySelectorAll('[data-fs-component]');
+  for (let i = 0; i < elements.length; i++) {
+    let element = elements[i];
+    let id = element.getAttribute('data-fs-bootstrap-id');
     if (id && oldComponents[id]) {
       components[id] = oldComponents[id];
       info.saved++;
     } else {
-      var ctorName = element.getAttribute('data-fs-component').trim();
-      var ctor = componentMap[ctorName];
+      let ctorName = element.getAttribute('data-fs-component').trim();
+      let ctor = componentMap[ctorName];
       if (ctor) {
-        var component = new ctor({
+        let component = new ctor({
           element: element
         });
         components[component.id] = component;
@@ -55,10 +53,10 @@ function bootstrap(componentMap, oldComponents) {
 }
 
 function cleanup(newComponents, oldComponents) {
-  var componentIds = Object.keys(oldComponents);
-  var count = 0;
-  for (var i = 0; i < componentIds.length; i++) {
-    var id = componentIds[i];
+  let componentIds = Object.keys(oldComponents);
+  let count = 0;
+  for (let i = 0; i < componentIds.length; i++) {
+    let id = componentIds[i];
     if (!newComponents[id]) {
       oldComponents[id].destroy();
       count++;
@@ -68,7 +66,7 @@ function cleanup(newComponents, oldComponents) {
 }
 
 function instance(componentMap, id) {
-  var lastBootstrap = {};
+  let lastBootstrap = {};
   id = id || 'sauron';
 
   function rebootstrap(map) {
@@ -97,4 +95,4 @@ function instance(componentMap, id) {
   };
 }
 
-module.exports = instance;
+export default instance;
