@@ -24,18 +24,29 @@ var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var connect = require('gulp-connect');
 var jasmineBrowser = require('gulp-jasmine-browser');
+var eslint = require('gulp-eslint');
 var webpack = require('webpack-stream');
-var path = require('path');
 
 var BUNDLE_NAME = 'sauron';
-var BUILD_DIR = 'dist/';
+var globs = {
+  src: 'src/**/*.js',
+  spec: 'spec/**/*.spec.js'
+};
+
+var paths = {
+  root: __dirname,
+  entry: 'src/index.js',
+  eslint: './.eslintrc.json',
+  build: 'dist/',
+  example: 'example/'
+};
 
 gulp.task('clean', function() {
-  return del(BUILD_DIR);
+  return del(paths.build);
 });
 
 gulp.task('bundle', ['clean'], function() {
-  return gulp.src('src/index.js')
+  return gulp.src(paths.entry)
     .pipe(webpack({
       output: {
         filename: BUNDLE_NAME + '.js',
@@ -43,31 +54,37 @@ gulp.task('bundle', ['clean'], function() {
         libraryTarget: 'umd'
       }
     }))
-    .pipe(gulp.dest(BUILD_DIR));
+    .pipe(gulp.dest(paths.build));
 });
 
 gulp.task('minify', ['bundle'], function() {
-  return gulp.src(BUILD_DIR + BUNDLE_NAME + '.js')
+  return gulp.src(paths.build + BUNDLE_NAME + '.js')
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
     }))
     .on('error', gutil.log)
-    .pipe(gulp.dest(BUILD_DIR));
+    .pipe(gulp.dest(paths.build));
 });
 
 gulp.task('demo', ['bundle'], function() {
   return connect.server({
-    root: ['example', BUILD_DIR],
+    root: [paths.example, paths.build],
     port: 3001
   });
 });
 
-gulp.task('test', function() {
-  return gulp.src('spec/**/*.spec.js')
+gulp.task('lint', function() {
+  return gulp.src(globs.src)
+    .pipe(eslint(paths.eslint))
+    .pipe(eslint.failOnError());
+});
+
+gulp.task('test', ['lint'], function() {
+  return gulp.src(globs.spec)
     .pipe(webpack({
       resolve: {
-        root: path.resolve(__dirname)
+        root: paths.root
       }
     }))
     .pipe(jasmineBrowser.specRunner({
