@@ -30,19 +30,41 @@ var path = require('path');
 var BUNDLE_NAME = 'sauron';
 var BUILD_DIR = 'dist/';
 
+const moduleConfig =  {
+  loaders: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: "babel-loader",
+      query: { "presets": ["es2015"] }
+    }
+  ]
+};
+
+const webpackConfig = {
+  module: moduleConfig,
+  output: {
+    filename: BUNDLE_NAME + '.js',
+    library: BUNDLE_NAME,
+    libraryTarget: 'umd'
+  }
+};
+
+let webpackTestConfig = {
+  module: moduleConfig,
+  resolve: {
+    root: path.resolve(__dirname)
+  }
+}
+
+
 gulp.task('clean', function() {
   return del(BUILD_DIR);
 });
 
 gulp.task('bundle', ['clean'], function() {
   return gulp.src('src/index.js')
-    .pipe(webpack({
-      output: {
-        filename: BUNDLE_NAME + '.js',
-        library: BUNDLE_NAME,
-        libraryTarget: 'umd'
-      }
-    }))
+    .pipe(webpack(webpackConfig))
     .pipe(gulp.dest(BUILD_DIR));
 });
 
@@ -65,11 +87,7 @@ gulp.task('demo', ['bundle'], function() {
 
 gulp.task('test', function() {
   return gulp.src('spec/**/*.spec.js')
-    .pipe(webpack({
-      resolve: {
-        root: path.resolve(__dirname)
-      }
-    }))
+    .pipe(webpack(webpackTestConfig))
     .pipe(jasmineBrowser.specRunner({
       console: true
     }))
