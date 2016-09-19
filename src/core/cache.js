@@ -1,7 +1,7 @@
 let caches = {};
 
 /* more of a singleton manager than a factory */
-function CacheFactory(id) {
+export default function CacheFactory(id) {
   if(!id)
     return;
   if(!caches[id])
@@ -44,5 +44,3 @@ export class Cache {
       fn( keys[i], this.get(keys[i]) )
   }
 }
-
-export default CacheFactory;

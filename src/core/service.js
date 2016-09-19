@@ -1,6 +1,6 @@
 import broadcast from './broadcast';
 
-export class Service {
+export default class Service {
   constructor (pubs, subs) {
     this.pubChannels = pubs;
     this.subChannelsHash = {};

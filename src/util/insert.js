@@ -1,4 +1,4 @@
-export function insert(params) {
+export default function insert(params) {
   params = params || {};
   let element = document.createElement(params.tagName || 'DIV');
   if(params.attributes) {

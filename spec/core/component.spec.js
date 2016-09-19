@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Rx';
-import { Component } from 'src/core/component';
-import { insert, ready } from 'src/util'
+import Component from 'src/core/component';
+import { insert, ready } from 'src/util';
 
 ready(function() {
   describe("Component", function() {

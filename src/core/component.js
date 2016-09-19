@@ -17,7 +17,7 @@ function strToArray(str) {
   return Object.keys(strToHash(str));
 }
 
-export class Component {
+export default class Component {
   constructor(params){
     this.element = params.element;
     this.id = ++Component._index;

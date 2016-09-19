@@ -25,6 +25,7 @@ var rename = require('gulp-rename');
 var connect = require('gulp-connect');
 var jasmineBrowser = require('gulp-jasmine-browser');
 var eslint = require('gulp-eslint');
+var babel = require('gulp-babel');
 var webpack = require('webpack-stream');
 
 var BUNDLE_NAME = 'sauron';
@@ -35,18 +36,34 @@ var globs = {
 
 var paths = {
   root: __dirname,
-  entry: 'src/index.js',
   eslint: './.eslintrc.json',
   build: 'dist/',
-  example: 'example/'
+  example: 'example/',
+  tmp: 'tmp/'
 };
 
 gulp.task('clean', function() {
-  return del(paths.build);
+  return del([paths.build, paths.tmp]);
 });
 
-gulp.task('bundle', ['clean'], function() {
-  return gulp.src(paths.entry)
+gulp.task('babel:src', ['clean'], function() {
+  return gulp.src(globs.src)
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .pipe(gulp.dest(paths.tmp));
+});
+
+gulp.task('babel:spec', ['clean'], function() {
+  return gulp.src(globs.spec)
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .pipe(gulp.dest(paths.tmp));
+});
+
+gulp.task('bundle', ['babel:src'], function() {
+  return gulp.src(paths.tmp + 'index.js')
     .pipe(webpack({
       output: {
         filename: BUNDLE_NAME + '.js',
@@ -80,8 +97,8 @@ gulp.task('lint', function() {
     .pipe(eslint.failOnError());
 });
 
-gulp.task('test', ['lint'], function() {
-  return gulp.src(globs.spec)
+gulp.task('test', ['babel:spec'], function() {
+  return gulp.src(paths.tmp + '**/*.spec.js')
     .pipe(webpack({
       resolve: {
         root: paths.root

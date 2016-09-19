@@ -30,8 +30,3 @@ export function next(channels, event, data, id) {
     id: id
   });
 }
-
-export default {
-  attachSubject,
-  next
-}

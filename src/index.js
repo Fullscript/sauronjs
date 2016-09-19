@@ -1,4 +1,7 @@
-import { instance, broadcast, Cache, Service, Component } from './core'
+import * as core from './core';
+export default core;
+export * from './core';
+// unintuitive export syntax but it works http://jamesknelson.com/re-exporting-es6-modules/
 export { default as util } from './util';
 
 /* TODO: with the broadcast refactor, this event system should be removed */
@@ -11,15 +14,3 @@ export let events = {
     }
   }
 };
-
-/*
-  Exports all main functions as named exports from this file.
-  This also sauron object on window to have all named functions
-*/
-export { instance, broadcast, Cache, Service, Component };
-
-/*
-  Also exports all main functions on the default.
-  Makes for better imports if using modules imports
- */
-export default { instance, broadcast, Cache, Service, Component };

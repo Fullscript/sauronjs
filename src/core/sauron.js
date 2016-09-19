@@ -1,4 +1,4 @@
-import Cache from './cache';
+import CacheFactory from './cache';
 
 class Info {
   constructor(){
@@ -14,7 +14,7 @@ class Info {
 }
 
 function initCache(id) {
-  let cache = Cache(id);
+  let cache = CacheFactory(id);
   let nodes = document.querySelectorAll('script[type="text/fs-cache"]');
   for (let i = 0; i < nodes.length; i++)
     cache.set(nodes[i].id, nodes[i].textContent.trim());

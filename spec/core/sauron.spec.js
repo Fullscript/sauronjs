@@ -1,5 +1,5 @@
 import sauron from 'src/core/sauron';
-import { Component } from 'src/core/component';
+import Component from 'src/core/component';
 import CacheFactory from 'src/core/cache';
 import { insert, ready } from 'src/util';
 
