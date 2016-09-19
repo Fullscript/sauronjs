@@ -28,80 +28,67 @@ var eslint = require('gulp-eslint');
 var babel = require('gulp-babel');
 var webpack = require('webpack-stream');
 
-var BUNDLE_NAME = 'sauron';
-var globs = {
-  src: 'src/**/*.js',
-  spec: 'spec/**/*.spec.js'
-};
-
-var paths = {
-  root: __dirname,
-  eslint: './.eslintrc.json',
-  build: 'dist/',
-  example: 'example/',
-  tmp: 'tmp/'
-};
-
 gulp.task('clean', function() {
-  return del([paths.build, paths.tmp]);
+  return del(['dist/', 'es5/']);
 });
 
 gulp.task('babel:src', ['clean'], function() {
-  return gulp.src(globs.src)
+  return gulp.src('src/**/*.js')
     .pipe(babel({
       presets: ['es2015']
     }))
-    .pipe(gulp.dest(paths.tmp));
+    .pipe(gulp.dest('es5/src/'));
 });
 
-gulp.task('babel:spec', ['clean'], function() {
-  return gulp.src(globs.spec)
+gulp.task('babel:spec', ['babel:src'], function() {
+  return gulp.src('spec/**/*.spec.js')
     .pipe(babel({
       presets: ['es2015']
     }))
-    .pipe(gulp.dest(paths.tmp));
+    .pipe(gulp.dest('es5/spec/'));
 });
 
 gulp.task('bundle', ['babel:src'], function() {
-  return gulp.src(paths.tmp + 'index.js')
+  return gulp.src('es5/src/index.js')
     .pipe(webpack({
       output: {
-        filename: BUNDLE_NAME + '.js',
-        library: BUNDLE_NAME,
+        filename: 'sauron.js',
+        library: 'sauron',
         libraryTarget: 'umd'
       }
     }))
-    .pipe(gulp.dest(paths.build));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('minify', ['bundle'], function() {
-  return gulp.src(paths.build + BUNDLE_NAME + '.js')
+  return gulp.src('dist/sauron.js')
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
     }))
     .on('error', gutil.log)
-    .pipe(gulp.dest(paths.build));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('demo', ['bundle'], function() {
   return connect.server({
-    root: [paths.example, paths.build],
+    root: ['example/', 'dist/'],
     port: 3001
   });
 });
 
+// TODO: configure linting for es6
 gulp.task('lint', function() {
-  return gulp.src(globs.src)
-    .pipe(eslint(paths.eslint))
+  return gulp.src('src/**/*.js')
+    .pipe(eslint('.eslintrc.json'))
     .pipe(eslint.failOnError());
 });
 
-gulp.task('test', ['babel:spec'], function() {
-  return gulp.src(paths.tmp + '**/*.spec.js')
+gulp.task('test', [/*'lint',*/ 'babel:spec'], function() {
+  return gulp.src('tmp/spec/**/*.spec.js')
     .pipe(webpack({
       resolve: {
-        root: paths.root
+        modulesDirectories: ['node_modules/', 'es5/']
       }
     }))
     .pipe(jasmineBrowser.specRunner({

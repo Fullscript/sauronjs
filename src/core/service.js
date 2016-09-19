@@ -1,4 +1,4 @@
-import broadcast from './broadcast';
+import * as broadcast from './broadcast';
 
 export default class Service {
   constructor (pubs, subs) {
