@@ -17,78 +17,80 @@
   composed of gulp tasks to minimize vendor lock in.
 */
 
-import del from 'del';
-import gulp from 'gulp';
-import uglify from 'gulp-uglify';
-import gutil from 'gulp-util';
-import rename from 'gulp-rename';
-import connect from 'gulp-connect'
-import jasmineBrowser from 'gulp-jasmine-browser';
-import webpack from 'webpack-stream';
-import babel from 'gulp-babel';
-import path from 'path'
-
-const BUNDLE_NAME = 'sauron';
-const BUILD_DIR = 'dist/';
-
-const moduleConfig = {
-  loaders: [
-    {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: "babel-loader",
-      query: { "presets": ["es2015"] }
-    }
-  ]
-};
-
-const webpackConfig = {
-  module: moduleConfig,
-  output: {
-    filename: BUNDLE_NAME + '.js',
-    library: BUNDLE_NAME,
-    libraryTarget: 'umd'
-  }
-};
-
-const webpackTestConfig = {
-  module: moduleConfig,
-  resolve: {
-    root: path.resolve(__dirname)
-  }
-};
-
+var del = require('del');
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+var gutil = require('gulp-util');
+var rename = require('gulp-rename');
+var connect = require('gulp-connect');
+var jasmineBrowser = require('gulp-jasmine-browser');
+var eslint = require('gulp-eslint');
+var babel = require('gulp-babel');
+var webpack = require('webpack-stream');
 
 gulp.task('clean', function() {
-  return del(BUILD_DIR);
+  return del(['dist/', 'es5/']);
 });
 
-gulp.task('bundle', ['clean'], function() {
-  return gulp.src('src/index.js')
-    .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest(BUILD_DIR));
+function transpile(src, dest) {
+  return gulp.src(src)
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .pipe(gulp.dest(dest));
+}
+
+gulp.task('babel:src', ['clean'], function() {
+  return transpile('src/**/*.js', 'es5/src/');
+});
+
+gulp.task('babel:spec', ['babel:src'], function() {
+  return transpile('spec/**/*.spec.js', 'es5/spec/');
+});
+
+gulp.task('bundle', ['babel:src'], function() {
+  return gulp.src('es5/src/index.js')
+    .pipe(webpack({
+      output: {
+        filename: 'sauron.js',
+        library: 'sauron',
+        libraryTarget: 'umd'
+      }
+    }))
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('minify', ['bundle'], function() {
-  return gulp.src(BUILD_DIR + BUNDLE_NAME + '.js')
+  return gulp.src('dist/sauron.js')
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min'
     }))
     .on('error', gutil.log)
-    .pipe(gulp.dest(BUILD_DIR));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('demo', ['bundle'], function() {
   return connect.server({
-    root: ['example', BUILD_DIR],
+    root: ['example/', 'dist/'],
     port: 3001
   });
 });
 
-gulp.task('test', function() {
-  return gulp.src('spec/**/*.spec.js')
-    .pipe(webpack(webpackTestConfig))
+// TODO: configure linting for es6
+gulp.task('lint', function() {
+  return gulp.src('src/**/*.js')
+    .pipe(eslint('.eslintrc.json'))
+    .pipe(eslint.failOnError());
+});
+
+gulp.task('test', [ /*'lint', */ 'babel:spec'], function() {
+  return gulp.src('es5/spec/**/*.spec.js')
+    .pipe(webpack({
+      resolve: {
+        modulesDirectories: ['node_modules/', 'es5/']
+      }
+    }))
     .pipe(jasmineBrowser.specRunner({
       console: true
     }))

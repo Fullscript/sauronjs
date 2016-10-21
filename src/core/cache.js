@@ -1,48 +1,46 @@
 let caches = {};
 
 /* more of a singleton manager than a factory */
-function CacheFactory(id) {
-  if(!id)
+export default function CacheFactory(id) {
+  if (!id)
     return;
-  if(!caches[id])
+  if (!caches[id])
     caches[id] = new Cache();
   return caches[id];
 }
 
 export class Cache {
-  constructor(){
+  constructor() {
     this._cache = {};
   }
 
-  get(key){
+  get(key) {
     return this._cache[key];
   }
 
-  exists(key){
+  exists(key) {
     return !!this.get(key);
   }
 
-  set(key, value){
+  set(key, value) {
     this._cache[key] = value;
   }
 
-  clear(){
+  clear() {
     this._cache = {};
   }
 
-  keys(){
+  keys() {
     return Object.keys(this._cache);
   }
 
-  size(){
+  size() {
     return this.keys().length;
   }
 
-  forEach(fn){
+  forEach(fn) {
     let keys = this.keys();
-    for(let i; i < keys.length; i++)
-      fn( keys[i], this.get(keys[i]) )
+    for (let i; i < keys.length; i++)
+      fn(keys[i], this.get(keys[i]))
   }
 }
-
-export default CacheFactory;

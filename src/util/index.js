@@ -1,10 +1,2 @@
-import { insert } from './insert';
-import { ready } from './ready'
-
-export { insert } from './insert';
-export { ready } from './ready';
-
-export default {
-  insert,
-  ready
-}
+export { default as insert } from './insert';
+export { default as ready } from './ready';

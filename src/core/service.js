@@ -1,6 +1,6 @@
-import broadcast from './broadcast';
+import * as broadcast from './broadcast';
 
-export class Service {
+export default class Service {
   constructor (pubs, subs) {
     this.pubChannels = pubs;
     this.subChannelsHash = {};
@@ -10,7 +10,7 @@ export class Service {
     broadcast.attachSubject(this);
   }
 
-  broadcast(event, data){
+  broadcast(event, data) {
     broadcast.next(this.pubChannels, event, data);
   }
 }

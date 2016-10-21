@@ -1,4 +1,6 @@
-dist
-node_modules
+dist/
+node_modules/
+tmp/
+es5/
 .DS_Store
 .npm-debug.log

@@ -1,20 +1,20 @@
-import Cache from './cache';
+import CacheFactory from './cache';
 
 class Info {
-  constructor(){
+  constructor( ){
     this.noConstructor = {};
     this.created = 0;
     this.saved = 0;
     this.deleted = 0;
   }
 
-  get total(){
+  get total() {
     return this.created + this.saved;
   }
 }
 
 function initCache(id) {
-  let cache = Cache(id);
+  let cache = CacheFactory(id);
   let nodes = document.querySelectorAll('script[type="text/fs-cache"]');
   for (let i = 0; i < nodes.length; i++)
     cache.set(nodes[i].id, nodes[i].textContent.trim());
@@ -47,8 +47,8 @@ function bootstrap(componentMap, oldComponents) {
   }
   info.deleted = cleanup(components, oldComponents);
   return {
-    components: components,
-    info: info
+    components,
+    info
   };
 }
 
@@ -78,20 +78,20 @@ function instance(componentMap, id) {
   rebootstrap();
 
   return {
-    rebootstrap: rebootstrap,
-    info: function() {
+    rebootstrap,
+    info() {
       lastBootstrap.info.id = id;
       return lastBootstrap.info;
     },
-    plugin: function(plugin, options) {
+    plugin(plugin, options) {
       plugin(this, options || {});
       return this;
     },
-    service: function(Service, options) {
+    service(Service, options) {
       new Service(options);
       return this;
     },
-    initCache: initCache
+    initCache
   };
 }
 

@@ -1,10 +1,10 @@
 import sauron from 'src/core/sauron';
-import { Component } from 'src/core/component';
+import Component from 'src/core/component';
 import CacheFactory from 'src/core/cache';
 import { insert, ready } from 'src/util';
 
-ready(function() {
-  describe('the eye of sauron', function() {
+ready(() => {
+  describe('the eye of sauron', () => {
     // dummy component definition extends Component
     class Foo extends Component {
       constructor(params) {
@@ -14,11 +14,11 @@ ready(function() {
 
     let sandbox = insert();
 
-    afterEach(function() {
+    afterEach(() => {
       sandbox.innerHTML = "";
     });
 
-    it('bootstraps the page', function() {
+    it('bootstraps the page', () => {
       insert({
         attributes: {
           "data-fs-component": "foo"
@@ -33,7 +33,7 @@ ready(function() {
       expect(app.info().saved).toBe(0);
     });
 
-    it('tracks components with no associated constructor', function() {
+    it('tracks components with no associated constructor', () => {
       insert({
         attributes: {
           "data-fs-component": "foo"
@@ -49,8 +49,8 @@ ready(function() {
       expect(app.info().noConstructor['foo']).toBe(true);
     });
 
-    describe('caching', function() {
-      it('scrapes the dom for text/fs-cache scripts and commits them to the cache', function() {
+    describe('caching', () => {
+      it('scrapes the dom for text/fs-cache scripts and commits them to the cache', () => {
         let cacheElement = insert({
           attributes: {
             id: 'hello',
@@ -66,12 +66,12 @@ ready(function() {
       });
     });
 
-    describe("rebootstrap", function() {
+    describe("rebootstrap", () => {
 
       let app;
       let element;
 
-      beforeEach(function() {
+      beforeEach(() => {
         element = insert({
           attributes: {
             "data-fs-component": "foo"
@@ -83,22 +83,20 @@ ready(function() {
         });
       });
 
-      it('saves still present components between cycles', function() {
+      it('saves still present components between cycles', () => {
         app.rebootstrap();
         expect(app.info().total).toBe(1);
         expect(app.info().deleted).toBe(0);
         expect(app.info().saved).toBe(1);
       });
 
-      it('deletes dead components each cycle', function() {
+      it('deletes dead components each cycle', () => {
         element.parentNode.removeChild(element);
         app.rebootstrap();
         expect(app.info().total).toBe(0);
         expect(app.info().deleted).toBe(1);
         expect(app.info().saved).toBe(0);
       });
-
     });
-
   });
 });
