@@ -32,20 +32,20 @@ gulp.task('clean', function() {
   return del(['dist/', 'es5/']);
 });
 
-gulp.task('babel:src', ['clean'], function() {
-  return gulp.src('src/**/*.js')
+function transpile(src, dest) {
+  return gulp.src(src)
     .pipe(babel({
       presets: ['es2015']
     }))
-    .pipe(gulp.dest('es5/src/'));
+    .pipe(gulp.dest(dest));
+}
+
+gulp.task('babel:src', ['clean'], function() {
+  return transpile('src/**/*.js', 'es5/src/');
 });
 
 gulp.task('babel:spec', ['babel:src'], function() {
-  return gulp.src('spec/**/*.spec.js')
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(gulp.dest('es5/spec/'));
+  return transpile('spec/**/*.spec.js', 'es5/spec/');
 });
 
 gulp.task('bundle', ['babel:src'], function() {
@@ -84,8 +84,8 @@ gulp.task('lint', function() {
     .pipe(eslint.failOnError());
 });
 
-gulp.task('test', [/*'lint',*/ 'babel:spec'], function() {
-  return gulp.src('tmp/spec/**/*.spec.js')
+gulp.task('test', [ /*'lint', */ 'babel:spec'], function() {
+  return gulp.src('es5/spec/**/*.spec.js')
     .pipe(webpack({
       resolve: {
         modulesDirectories: ['node_modules/', 'es5/']

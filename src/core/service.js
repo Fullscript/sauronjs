@@ -10,7 +10,7 @@ export default class Service {
     broadcast.attachSubject(this);
   }
 
-  broadcast(event, data){
+  broadcast(event, data) {
     broadcast.next(this.pubChannels, event, data);
   }
 }

@@ -1,72 +1,72 @@
 import CacheFactory, { Cache } from 'src/core/cache';
 
-describe('CacheFactory', function() {
-  it('does nothing when no id is specified', function() {
+describe('CacheFactory', () => {
+  it('does nothing when no id is specified', () => {
     let cache = CacheFactory();
     expect(cache).not.toBeDefined();
   });
 
-  it('creates a cache for the specified id', function() {
+  it('creates a cache for the specified id', () => {
     let cache = CacheFactory('test');
     expect(cache).toBeDefined();
   });
 
-  it('retrieves an existing cache', function() {
+  it('retrieves an existing cache', () => {
     let cache = CacheFactory('test');
     let cache2 = CacheFactory('test');
     expect(cache).toBe(cache2);
   });
 
-  it('different ids return different caches', function() {
+  it('different ids return different caches', () => {
     let cache = CacheFactory('test');
     let cache2 = CacheFactory('test2');
     expect(cache).not.toBe(cache2);
   });
 });
 
-describe('Cache', function() {
+describe('Cache', () => {
   let cache;
-  beforeEach(function() {
+  beforeEach(() => {
     cache = new Cache();
   });
 
-  describe('constructor', function() {
-    it('creates an empty hash', function() {
+  describe('constructor', () => {
+    it('creates an empty hash', () => {
       expect(Object.keys(cache._cache).length).toBe(0);
     });
   });
 
-  describe('exists', function() {
-    it('returns true when value is set for key', function() {
+  describe('exists', () => {
+    it('returns true when value is set for key', () => {
       cache._cache['hello'] = 'world';
       expect(cache.exists('hello')).toBe(true);
     });
 
-    it('returns false when value is not set for key', function() {
+    it('returns false when value is not set for key', () => {
       expect(cache.exists('hello')).toBe(false);
     });
   });
 
-  describe('get', function() {
-    it('returns the cached value when present', function() {
+  describe('get', () => {
+    it('returns the cached value when present', () => {
       cache._cache['hello'] = 'world';
       expect(cache.get('hello')).toBe('world');
     });
 
-    it('returns undefined when not present', function() {
+    it('returns undefined when not present', () => {
       expect(cache.get('hello')).not.toBeDefined();
     });
   });
 
-  describe('set', function() {
-    it('sets the key value pair', function() {
+  describe('set', () => {
+    it('sets the key value pair', () => {
       cache.set('hello', 'world');
       expect(cache._cache['hello']).toBe('world');
     });
   });
 
-  describe('keys', function() {
-    it('returns an array of keys in the cache', function() {
+  describe('keys', () => {
+    it('returns an array of keys in the cache', () => {
       cache.set('hello', 'world');
       let keys = cache.keys();
       expect(Array.isArray(keys)).toBe(true);
@@ -75,24 +75,24 @@ describe('Cache', function() {
     });
   });
 
-  describe('size', function() {
-    it('returns the number of keys in the cache', function() {
+  describe('size', () => {
+    it('returns the number of keys in the cache', () => {
       expect(cache.size()).toBe(0);
     });
   });
 
-  describe('clear', function() {
-    it('clears the cache', function() {
+  describe('clear', () => {
+    it('clears the cache', () => {
       cache.set('hello', 'world');
       cache.clear();
       expect(Object.keys(cache._cache).length).toBe(0);
     });
   });
 
-  describe('forEach', function() {
-    it('iterates each key value pair', function() {
+  describe('forEach', () => {
+    it('iterates each key value pair', () => {
       cache.set('hello', 'world');
-      cache.forEach(function(key, value) {
+      cache.forEach((key, value) => {
         expect(key).toBe('hello');
         expect(value).toBe('world');
       });

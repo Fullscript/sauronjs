@@ -4,12 +4,12 @@ let subject = new Subject();
 
 function filter(broadcast) {
   // if id is present, reject anything self emitted
-  if(broadcast.id && broadcast.id === this.id)
+  if (broadcast.id && broadcast.id === this.id)
     return false;
   // for all channels the broadcast was on, if this was registered on one allow event
-  for(let i = 0; i < broadcast.channels.length; i++) {
+  for (let i = 0; i < broadcast.channels.length; i++) {
     let channel = broadcast.channels[i];
-    if(this.subChannelsHash[channel])
+    if (this.subChannelsHash[channel])
       return true;
   }
   // otherwise ignore event

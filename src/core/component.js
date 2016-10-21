@@ -2,9 +2,9 @@ import * as broadcast from './broadcast';
 
 function strToHash(str) {
   let hash = {};
-  if(str) {
+  if (str) {
     let tokens = str.split(',');
-    for(let i = 0; i < tokens.length; i++) {
+    for (let i = 0; i < tokens.length; i++) {
       let token = tokens[i].trim();
       hash[token] = true;
     }
@@ -18,7 +18,7 @@ function strToArray(str) {
 }
 
 export default class Component {
-  constructor(params){
+  constructor(params) {
     this.element = params.element;
     this.id = ++Component._index;
     this.attr('data-fs-bootstrap-id', this.id);
@@ -29,45 +29,45 @@ export default class Component {
     this.state = params.state || {};
   }
 
-  broadcast(event, data){
+  broadcast(event, data) {
     broadcast.next(this.pubChannels, event, data, this.id);
   }
 
-  destroy(){
+  destroy() {
     this.globalSubjectSubscription.unsubscribe();
     this.broadcastSubject.complete();
-    for(let i = 0; i < this.subscriptions.length; i++)
-      if(!this.subscriptions[i].isUnsubscribed)
+    for (let i = 0; i < this.subscriptions.length; i++)
+      if (!this.subscriptions[i].isUnsubscribed)
         this.subscriptions[i].unsubscribe();
   }
 
-  registerSubscription(subscriptions){
-    if(!Array.isArray(subscriptions))
+  registerSubscription(subscriptions) {
+    if (!Array.isArray(subscriptions))
       subscriptions = [subscriptions];
-    for(let i = 0; i < subscriptions.length; i++)
+    for (let i = 0; i < subscriptions.length; i++)
       this.subscriptions.push(subscriptions[i]);
   }
 
-  subscribe(observables){
-    if(!Array.isArray(observables))
+  subscribe(observables) {
+    if (!Array.isArray(observables))
       observables = [observables];
-    for(let i = 0; i < observables.length; i++)
+    for (let i = 0; i < observables.length; i++)
       this.subscriptions.push(observables[i].subscribe());
   }
 
   /* element.querySelector shortcut */
-  find(selector){
+  find(selector) {
     return this.element.querySelector(selector);
   }
 
   /* element.querySelectorAll shortcut */
-  findAll(selector){
+  findAll(selector) {
     return this.element.querySelectorAll(selector);
   }
 
   /* element.(get|set)Attribute shortcut */
-  attr(key, value){
-    if(typeof(value) !== 'undefined')
+  attr(key, value) {
+    if (typeof(value) !== 'undefined')
       this.element.setAttribute(key, value);
     else
       return this.element.getAttribute(key);
