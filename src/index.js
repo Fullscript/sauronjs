@@ -1,8 +1,8 @@
 import * as core from './core';
+import * as util from './util';
 export default core;
 export * from './core';
-// unintuitive export syntax but it works http://jamesknelson.com/re-exporting-es6-modules/
-export { default as util } from './util';
+export { util as util };
 
 /* TODO: with the broadcast refactor, this event system should be removed */
 export let events = {
