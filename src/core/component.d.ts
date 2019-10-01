@@ -15,7 +15,7 @@ declare class Component {
 
     static _index: number;
 
-    broadcast(event: string, data: any): void;
+    broadcast(event: string, data?: any): void;
     destroy(): void;
     registerSubscription(subscriptions: ReadonlyArray<Subscription>): void;
     subscribe(observables: ReadonlyArray<Observable<any>>): void;
