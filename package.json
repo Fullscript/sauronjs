@@ -17,6 +17,7 @@
   "description": "frontend library for advanced interactivity based on observables",
   "version": "0.1.2",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "directories": {
     "example": "example"
   },
