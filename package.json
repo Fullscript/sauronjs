@@ -15,8 +15,9 @@
   },
   "name": "sauronjs",
   "description": "frontend library for advanced interactivity based on observables",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "directories": {
     "example": "example"
   },
@@ -38,7 +39,7 @@
   "contributors": [
     "Patrick Vice <patrickgvice@gmail.com> (https://github.com/patvice)",
     "Kurt Funai <me@kurtfunai.com> (https://github.com/kurtfunai)",
-    "Matt MacLeod <developer.mattmacleod@gmail.com> (https://github.com/matt-macleod)"
+    "Eric Mulligan <eric.pierre.mulligan@gmail.com> (https://github.com/ericpmulligan)"
   ],
   "license": "MIT",
   "bugs": {
