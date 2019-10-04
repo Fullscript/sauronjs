@@ -20,7 +20,7 @@ declare class Component {
     registerSubscription(subscriptions: ReadonlyArray<Subscription>): void;
     subscribe(observables: ReadonlyArray<Observable<any>>): void;
     find(selector: string): HTMLElement;
-    findAll(selector: string): HTMLElement[];
+    findAll(selector: string): NodeListOf<HTMLElement>;
     attr(key: string): string;
     attr(key: string, value: string): void;
 }
