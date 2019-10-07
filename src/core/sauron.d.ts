@@ -6,14 +6,14 @@ declare class Info {
 }
 
 interface SauronComponentMap {
-    [key: string]: Component;
+    [key: string]: typeof Component;
 }
 
 interface SauronInstance {
     rebootstrap: (map?: SauronComponentMap) => void;
     info: () => Info;
     plugin: (plugin: (instance: SauronInstance, options: any) => void, options: any) => SauronInstance;
-    service: (Service: new (options: any) => Service, options: any) => SauronInstance;
+    service: (Service: new (options: any) => Service, options?: any) => SauronInstance;
     initCache: (id: string) => void;
 }
 
